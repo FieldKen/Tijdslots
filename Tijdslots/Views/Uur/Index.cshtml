@@ -1,0 +1,24 @@
+﻿@model IEnumerable<UurslotListViewModel>;
+
+<h1>Personeelgegevens</h1>
+@foreach (var datum in Model.OrderByDescending(x => x.Date.ToString("dd/MM/yyyy")).ThenBy(x => x.Naam).GroupBy(x => x.Date.ToString("dd/MM/yyyy")))
+{
+	<h2>@datum.Key</h2>
+
+	<div class="row">
+		@foreach (var inUit in datum.OrderByDescending(x => x.InUit).GroupBy(x => x.InUit))
+		{
+			<div class="col-sm">
+				<h3>@(inUit.Key ? "> Check-ins" : "> Check-outs")</h3>
+				<ul>
+					@foreach (var persoon in inUit)
+					{
+						<li style="color:@(inUit.Key ? "green" : "red")">
+							<strong>@persoon.Naam</strong> - @persoon.Date.Hour.ToString("00"):@persoon.Date.Minute.ToString("00")
+						</li>
+					}
+				</ul>
+			</div>
+		}
+	</div>
+}
